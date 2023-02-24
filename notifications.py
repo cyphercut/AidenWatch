@@ -1,5 +1,8 @@
+#!/usr/bin/python3
+
 import os
 import requests
+import logging
 from dotenv import load_dotenv
 
 # Load all variables from .env file
@@ -36,7 +39,8 @@ def send_email_notification(message):
     server.sendmail(email, send_to_email, text)
     server.quit()
 
-    print(f"Email notification sent: {message}")
+    logging.info(f"Email notification sent: {message}")
+
 
 def send_discord_notification(message):
     """
@@ -47,9 +51,9 @@ def send_discord_notification(message):
     headers = {'Content-type': 'application/json'}
     response = requests.post(discord_webhook_url, json=payload, headers=headers)
     if response.status_code == 204:
-        print(f"Discord notification sent: {message}")
+        logging.info(f"Discord notification sent: {message}")
     else:
-        print(f"Error sending Discord notification: {message}. Status code {response.status_code}")
+        logging.error(f"Error sending Discord notification: {message}. Status code {response.status_code}")
 
 
 def send_whatsapp_notification(message):
@@ -71,7 +75,7 @@ def send_whatsapp_notification(message):
                         to='whatsapp:' + twilio_whatsapp_to
                     )
 
-    print(f"WhatsApp notification sent: {message}")
+    logging.info(f"WhatsApp notification sent: {message}")
 
 def send_notification(channel, message):
     """
@@ -87,5 +91,5 @@ def send_notification(channel, message):
         # send WhatsApp notification
         send_whatsapp_notification(message)
     else:
-        print(f"Error: Invalid channel {channel}")
+        logging.error(f"Error: Invalid channel {channel}")
         return
