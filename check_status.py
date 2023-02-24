@@ -24,8 +24,9 @@ def should_notify(status_code, current_time, last_notification_time):
 # Define a function to check the status code of an endpoint
 def check_status_code(name, endpoint, last_notification_time):
     url, method = endpoint['url'], endpoint['method']
+    data = endpoint.get('data', None)
     try:
-        response = requests.request(method, url)
+        response = requests.request(method, url, data=data)
         status_code = response.status_code
         current_time = datetime.datetime.now()
         dt_formatted = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
